@@ -31,6 +31,14 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  Expanded buildChatWidget() {
+    return Expanded(
+      child: Container(
+        color: Color.fromARGB(255, 240, 183, 179),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,8 +46,11 @@ class _ChatScreenState extends State<ChatScreen> {
         backgroundColor: Color.fromARGB(255, 222, 235, 207),
         title: Text('OpenAI Test'),
       ),
-      body: Container(
-        child: buildTextField(),
+      body: Column(
+        children: [
+          buildChatWidget(),
+          buildTextField(),
+        ],
       ),
     );
   }
