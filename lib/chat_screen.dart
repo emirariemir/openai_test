@@ -100,23 +100,22 @@ class _ChatScreenState extends State<ChatScreen> {
 
                   //print(userText);
 
-                  Future.delayed(Duration(milliseconds: 60)).then(
-                    (value) => animScrollDown(),
-                  );
-
                   print('getting into response phase');
                   print(userText);
 
-                  getResponse('what do you think about APPL stock?').then((value) {
+                  getResponse(userText).then((value) {
                     setState(() {
                       isGptTexting = false;
                       messages.add(
                         MessageBubble(text: value, messageFrom: MessageFrom.openai),
                       );
+                      Future.delayed(Duration(milliseconds: 60)).then(
+                        (value) => animScrollDown(),
+                      );
                     });
                   });
 
-                  Future.delayed(Duration(milliseconds: 60)).then((value) => animScrollDown());
+                  print('suppose to happen');
                 },
                 icon: const Icon(Icons.send),
               ),
