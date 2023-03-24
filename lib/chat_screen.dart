@@ -38,7 +38,15 @@ class _ChatScreenState extends State<ChatScreen> {
     );
 
     Map<String, dynamic> respond = jsonDecode(response.body);
-    return respond['choices'];
+    return respond['choices'][0]['text'];
+  }
+
+  void animScrollDown() {
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
   }
 
   Widget buildTextField() {
@@ -61,7 +69,32 @@ class _ChatScreenState extends State<ChatScreen> {
               child: IconButton(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 color: Colors.white,
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    messages.add(
+                      MessageBubble(text: controller.text, messageFrom: MessageFrom.user),
+                    );
+                    isGptTexting = true;
+                  });
+
+                  var userText = controller.text;
+
+                  controller.clear();
+
+                  Future.delayed(Duration(milliseconds: 60)).then(
+                    (value) => animScrollDown(),
+                  );
+
+                  getResponse(userText).then((value) {
+                    setState(() {
+                      messages.add(
+                        MessageBubble(text: value, messageFrom: MessageFrom.openai),
+                      );
+                    });
+                  });
+
+                  Future.delayed(Duration(milliseconds: 60)).then((value) => animScrollDown());
+                },
                 icon: const Icon(Icons.send),
               ),
             ),
