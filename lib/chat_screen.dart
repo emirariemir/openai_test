@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:openai_test/constants.dart';
 import 'package:openai_test/message_bubble.dart';
+import 'package:http/http.dart' as http;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -23,6 +25,20 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     isGptTexting = false;
+  }
+
+  Future<String> getResponse(String input) async {
+    const apiKey = "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";
+    var url = Uri.https("api.openai.com", "/v1/completions");
+
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $apiKey'},
+      body: jsonEncode({'model': 'text-davinci-003', 'prompt': input, 'temparature': 0, 'max_token': 2000, 'top_p': 1, 'frequency_penalty': 0.0, 'presence_penalty': 0.0}),
+    );
+
+    Map<String, dynamic> respond = jsonDecode(response.body);
+    return respond['choices'];
   }
 
   Widget buildTextField() {
@@ -60,7 +76,11 @@ class _ChatScreenState extends State<ChatScreen> {
       itemCount: messages.length,
       controller: scrollController,
       itemBuilder: (context, index) {
-        return MessageBubble();
+        var ms = messages[index];
+        return MessageBubbleWidget(
+          text: ms.text,
+          from: ms.messageFrom,
+        );
       },
     );
   }
@@ -77,6 +97,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // BUILD HERE!
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kMainColor,
@@ -87,7 +108,7 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Column(
         children: [
-          buildChatWidget(),
+          Expanded(child: buildChatWidget()),
           Visibility(
             visible: isGptTexting,
             child: buildProgressIndicator(),
@@ -116,8 +137,8 @@ class MessageBubbleWidget extends StatelessWidget {
         children: [
           from == MessageFrom.openai
               ? Container(
-                  margin: EdgeInsets.only(right: 10),
-                  child: CircleAvatar(
+                  margin: const EdgeInsets.only(right: 10),
+                  child: const CircleAvatar(
                     backgroundColor: kMainColor,
                     child: Icon(
                       Icons.android,
@@ -126,8 +147,8 @@ class MessageBubbleWidget extends StatelessWidget {
                   ),
                 )
               : Container(
-                  margin: EdgeInsets.only(right: 10),
-                  child: CircleAvatar(
+                  margin: const EdgeInsets.only(right: 10),
+                  child: const CircleAvatar(
                     backgroundColor: kBackgroundColor,
                     child: Icon(
                       Icons.person,
@@ -140,10 +161,10 @@ class MessageBubbleWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 child: Text(
                   text,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 ),
               )
             ],
