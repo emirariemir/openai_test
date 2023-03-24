@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -8,6 +9,16 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  late bool isGptTexting;
+
+  TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    isGptTexting = false;
+  }
+
   Widget buildTextField() {
     return Container(
       color: const Color.fromARGB(255, 204, 215, 236),
@@ -39,6 +50,15 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  Padding buildProgressIndicator() {
+    return const Padding(
+      padding: EdgeInsets.all(10),
+      child: CircularProgressIndicator(
+        color: Colors.lightGreen,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +69,10 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Column(
         children: [
           buildChatWidget(),
+          Visibility(
+            visible: isGptTexting,
+            child: buildProgressIndicator(),
+          ),
           buildTextField(),
         ],
       ),
