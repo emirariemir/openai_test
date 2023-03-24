@@ -98,3 +98,58 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
+
+class MessageBubbleWidget extends StatelessWidget {
+  final String text;
+  final MessageFrom from;
+
+  const MessageBubbleWidget({super.key, required this.text, required this.from});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      padding: EdgeInsets.all(16),
+      color: from == MessageFrom.openai ? kMainColor : kBackgroundColor,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          from == MessageFrom.openai
+              ? Container(
+                  margin: EdgeInsets.only(right: 10),
+                  child: CircleAvatar(
+                    backgroundColor: kMainColor,
+                    child: Icon(
+                      Icons.android,
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              : Container(
+                  margin: EdgeInsets.only(right: 10),
+                  child: CircleAvatar(
+                    backgroundColor: kBackgroundColor,
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+          Expanded(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.all(8),
+                child: Text(
+                  text,
+                  style: TextStyle(color: Colors.white),
+                ),
+              )
+            ],
+          ))
+        ],
+      ),
+    );
+  }
+}
