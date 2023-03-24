@@ -49,7 +49,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
 
     Map<String, dynamic> respond = jsonDecode(response.body);
-    print(respond);
+    //print(respond);
     return respond['choices'][0]['text'];
   }
 
@@ -71,8 +71,9 @@ class _ChatScreenState extends State<ChatScreen> {
             Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 15),
-                child: const TextField(
-                  decoration: InputDecoration.collapsed(hintText: 'Enter your text here'),
+                child: TextField(
+                  controller: controller,
+                  decoration: const InputDecoration.collapsed(hintText: 'Enter your text here'),
                 ),
               ),
             ),
@@ -89,23 +90,24 @@ class _ChatScreenState extends State<ChatScreen> {
                     isGptTexting = true;
                   });
 
-                  print('1');
+                  //print('1');
 
                   var userText = controller.text;
 
-                  print(userText);
+                  //print(userText);
 
                   controller.clear();
 
-                  print(userText);
+                  //print(userText);
 
                   Future.delayed(Duration(milliseconds: 60)).then(
                     (value) => animScrollDown(),
                   );
 
                   print('getting into response phase');
+                  print(userText);
 
-                  getResponse('how are you?').then((value) {
+                  getResponse('what do you think about APPL stock?').then((value) {
                     setState(() {
                       isGptTexting = false;
                       messages.add(
