@@ -14,6 +14,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
   TextEditingController controller = TextEditingController();
 
+  ScrollController scrollController = ScrollController();
+
+  final List<MessageBubble> messages = [];
+
   @override
   void initState() {
     super.initState();
@@ -27,16 +31,22 @@ class _ChatScreenState extends State<ChatScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           children: [
-            const Expanded(
-              child: TextField(
-                decoration: InputDecoration.collapsed(hintText: 'Enter your text here'),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: const TextField(
+                  decoration: InputDecoration.collapsed(hintText: 'Enter your text here'),
+                ),
               ),
             ),
-            IconButton(
-              padding: const EdgeInsets.symmetric(vertical: 15),
-              color: Colors.white,
-              onPressed: () {},
-              icon: const Icon(Icons.send),
+            Visibility(
+              visible: !isGptTexting,
+              child: IconButton(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                color: Colors.white,
+                onPressed: () {},
+                icon: const Icon(Icons.send),
+              ),
             ),
           ],
         ),
@@ -44,11 +54,13 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Expanded buildChatWidget() {
-    return Expanded(
-      child: Container(
-        color: kBackgroundColor,
-      ),
+  ListView buildChatWidget() {
+    return ListView.builder(
+      itemCount: messages.length,
+      controller: scrollController,
+      itemBuilder: (context, index) {
+        return MessageBubble();
+      },
     );
   }
 
@@ -56,7 +68,8 @@ class _ChatScreenState extends State<ChatScreen> {
     return const Padding(
       padding: EdgeInsets.all(10),
       child: CircularProgressIndicator(
-        color: Colors.lightGreen,
+        color: kMainColor,
+        backgroundColor: kBackgroundColor,
       ),
     );
   }
