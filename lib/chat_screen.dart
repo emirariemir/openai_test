@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:openai_test/constants.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -21,7 +22,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget buildTextField() {
     return Container(
-      color: const Color.fromARGB(255, 204, 215, 236),
+      color: kMainColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
@@ -33,6 +34,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             IconButton(
               padding: const EdgeInsets.symmetric(vertical: 15),
+              color: Colors.white,
               onPressed: () {},
               icon: const Icon(Icons.send),
             ),
@@ -45,7 +47,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Expanded buildChatWidget() {
     return Expanded(
       child: Container(
-        color: Color.fromARGB(255, 240, 183, 179),
+        color: kBackgroundColor,
       ),
     );
   }
@@ -63,8 +65,11 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 222, 235, 207),
-        title: Text('OpenAI Test'),
+        backgroundColor: kMainColor,
+        title: const Text(
+          'OpenAI Test',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: Column(
         children: [
