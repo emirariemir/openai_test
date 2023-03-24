@@ -28,16 +28,28 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<String> getResponse(String input) async {
-    const apiKey = "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";
+    final apiKey = "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";
+
     var url = Uri.https("api.openai.com", "/v1/completions");
 
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $apiKey'},
-      body: jsonEncode({'model': 'text-davinci-003', 'prompt': input, 'temparature': 0, 'max_token': 2000, 'top_p': 1, 'frequency_penalty': 0.0, 'presence_penalty': 0.0}),
+      body: jsonEncode(
+        {
+          'model': 'text-davinci-003',
+          'prompt': input,
+          'temperature': 0,
+          'max_tokens': 200,
+          'top_p': 1,
+          'frequency_penalty': 0.0,
+          'presence_penalty': 0.0,
+        },
+      ),
     );
 
     Map<String, dynamic> respond = jsonDecode(response.body);
+    print(respond);
     return respond['choices'][0]['text'];
   }
 
@@ -77,16 +89,25 @@ class _ChatScreenState extends State<ChatScreen> {
                     isGptTexting = true;
                   });
 
+                  print('1');
+
                   var userText = controller.text;
 
+                  print(userText);
+
                   controller.clear();
+
+                  print(userText);
 
                   Future.delayed(Duration(milliseconds: 60)).then(
                     (value) => animScrollDown(),
                   );
 
-                  getResponse(userText).then((value) {
+                  print('getting into response phase');
+
+                  getResponse('how are you?').then((value) {
                     setState(() {
+                      isGptTexting = false;
                       messages.add(
                         MessageBubble(text: value, messageFrom: MessageFrom.openai),
                       );
