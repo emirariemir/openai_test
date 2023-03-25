@@ -28,7 +28,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<String> getResponse(String input) async {
-    final apiKey = "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";
+    const apiKey = "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";
 
     var url = Uri.https("api.openai.com", "/v1/completions");
 
@@ -56,14 +56,14 @@ class _ChatScreenState extends State<ChatScreen> {
   void animScrollDown() {
     scrollController.animateTo(
       scrollController.position.maxScrollExtent,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
   }
 
   Widget buildTextField() {
     return Container(
-      color: kMainColor,
+      color: kPastelPurple,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
@@ -72,8 +72,9 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: TextField(
+                  style: TextStyle(color: Colors.white),
                   controller: controller,
-                  decoration: const InputDecoration.collapsed(hintText: 'Enter your text here'),
+                  decoration: const InputDecoration.collapsed(hintText: 'Enter your text here', hintStyle: TextStyle(color: Colors.white24)),
                 ),
               ),
             ),
@@ -90,18 +91,13 @@ class _ChatScreenState extends State<ChatScreen> {
                     isGptTexting = true;
                   });
 
-                  //print('1');
+                  Future.delayed(const Duration(milliseconds: 60)).then(
+                    (value) => animScrollDown(),
+                  );
 
                   var userText = controller.text;
 
-                  //print(userText);
-
                   controller.clear();
-
-                  //print(userText);
-
-                  print('getting into response phase');
-                  print(userText);
 
                   getResponse(userText).then((value) {
                     setState(() {
@@ -114,8 +110,6 @@ class _ChatScreenState extends State<ChatScreen> {
                       );
                     });
                   });
-
-                  print('suppose to happen');
                 },
                 icon: const Icon(Icons.send),
               ),
@@ -154,8 +148,10 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     // BUILD HERE!
     return Scaffold(
+      backgroundColor: kPastelBrown,
       appBar: AppBar(
-        backgroundColor: kMainColor,
+        backgroundColor: kPastelPurple,
+        elevation: 10.0,
         title: const Text(
           'OpenAI Test',
           style: TextStyle(color: Colors.white),
@@ -184,17 +180,17 @@ class MessageBubbleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      padding: EdgeInsets.all(16),
-      color: from == MessageFrom.openai ? kMainColor : kBackgroundColor,
+      //margin: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.all(6),
+      color: from == MessageFrom.openai ? kPastelGreen : kPastelRed,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: from == MessageFrom.openai ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: [
           from == MessageFrom.openai
               ? Container(
-                  margin: const EdgeInsets.only(right: 10),
+                  margin: const EdgeInsets.only(right: 10, top: 25),
                   child: const CircleAvatar(
-                    backgroundColor: kMainColor,
+                    backgroundColor: kPastelPurple,
                     child: Icon(
                       Icons.android,
                       color: Colors.white,
@@ -202,9 +198,10 @@ class MessageBubbleWidget extends StatelessWidget {
                   ),
                 )
               : Container(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   margin: const EdgeInsets.only(right: 10),
                   child: const CircleAvatar(
-                    backgroundColor: kBackgroundColor,
+                    backgroundColor: kPastelPurple,
                     child: Icon(
                       Icons.person,
                       color: Colors.white,
