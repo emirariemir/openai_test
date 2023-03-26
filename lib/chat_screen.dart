@@ -28,7 +28,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<String> getResponse(String input) async {
-    const apiKey = "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";
+    const apiKey = "<------secret api key------>";
 
     var url = Uri.https("api.openai.com", "/v1/completions");
 
